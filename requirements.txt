@@ -1,0 +1,5 @@
+pysimplegui
+sqlalchemy
+sqlalchemy-migrate
+xlrd
+xlwt
