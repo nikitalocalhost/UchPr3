@@ -1,12 +1,18 @@
 import re
 from .main import read, find_data_in_col
+from xlrd.book import Book
 from xlrd.sheet import Sheet
 
 
 name_pattern = re.compile("[a-zA-Zа-яА-Я]+ [a-zA-Zа-яА-Я]+")
 
+def get_year(wb: Book):
+    ws = wb.sheet_by_index(0)
+    year = ws.cell_value(26, 44)
+    return int(year)
 
-def get_teacher_info(ws: Sheet, group: str, group_col: int):
+
+def get_teacher_info(ws: Sheet, year: int, group: str, group_col: int):
     teachers: dict[str, list] = {}
     data = find_data_in_col(ws, 105, name_pattern)
     for i in data:
@@ -53,6 +59,7 @@ def get_teacher_info(ws: Sheet, group: str, group_col: int):
         subject = {
             'group': group,
             'group_col': group_col,
+            'year': year,
             'name': row[2],
             'is_pr': is_pr,
             'semesters': semesters
@@ -63,6 +70,12 @@ def get_teacher_info(ws: Sheet, group: str, group_col: int):
     return teachers
 
 
-# def merge_teacher_info(tl1: dict[str, list], tl2: dict[str, list]):
-#     for t1 in tl1:
-
+def merge_teacher_info(tl1: dict[str, list], tl2: dict[str, list]):
+    list: dict[str, list] = {}
+    for l in [tl1, tl2]:
+        for t in l:
+            if t in list:
+                list[t].extend(l[t])
+            else:
+                list[t] = l[t]
+    return list

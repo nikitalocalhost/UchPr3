@@ -28,7 +28,7 @@
 
 from os import walk, path
 from xml.main import read
-from xml.parse import get_teacher_info
+from xml.parse import get_teacher_info, merge_teacher_info, get_year
 
 
 def get_all_files(dir):
@@ -38,14 +38,24 @@ def get_all_files(dir):
         break
     return f
 
+
 def parse_all_files(dir):
     files = get_all_files(dir)
+    output = {}
     for e in files:
         file = path.join(dir, e)
-        wb = read(file)
-        ws = wb.sheet_by_index(2)
-        output = get_teacher_info(ws)
+        basename = path.basename(file)
+        (base, _) = path.splitext(basename)
+        [group, group_col] = base.split('_')
+        try:
+            wb = read(file)
+            ws = wb.sheet_by_index(2)
+            ti = get_teacher_info(ws, get_year(wb), group, group_col)
+            output = merge_teacher_info(output, ti)
+        except:
+            pass
 
-        print(output)
+    print(output)
+
 
 parse_all_files('input')
