@@ -14,7 +14,19 @@ def get_year(wb: Book):
 
 def get_teacher_info(ws: Sheet, year: int, group: str, group_col: int):
     teachers: dict[str, list] = {}
-    data = find_data_in_col(ws, 105, name_pattern)
+    sems = 8
+    data = False
+    while not data:
+        try:
+            data = find_data_in_col(ws, 105 - ((8 - sems) * 10), name_pattern)
+        except:
+            sems -=1
+
+    # try:
+    #     data = find_data_in_col(ws, 105, name_pattern)
+    # except:
+    #     data = find_data_in_col(ws, 105 - 20, name_pattern)
+    #     sems -= 2
     for i in data:
         name = data[i]
         if name not in teachers:
@@ -27,7 +39,7 @@ def get_teacher_info(ws: Sheet, year: int, group: str, group_col: int):
 
         semesters = {}
 
-        for i in range(8):
+        for i in range(sems):
             x = 20 + i * 10
             sem = row[x:x+10]
             if is_pr:
