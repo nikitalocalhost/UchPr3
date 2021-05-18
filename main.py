@@ -1,35 +1,8 @@
-# import PySimpleGUI as sg
-
-# sg.theme('System Default For Real')
-
-
-# def main():
-#     layout = [
-#         [sg.FilesBrowse('Выберите файлы...', key='-FILES-', file_types=(("Файлы Excel", "*.xls *xlsx"),))],
-#         [sg.B('Сформировать отчетность'), sg.B('Отменить')]
-#     ]
-#     window = sg.Window('337POk1', layout)
-
-#     while True:
-#         event, values = window.read(timeout = 20)
-#         print(values['-FILES-'])
-#         if values['-FILES-']:
-#             window['-FILES-'].update('Выбрано файлов: ' + str(len(values['-FILES-'].split(';'))))
-#         else:
-#             window['-FILES-'].update('Выберите файлы...')
-
-#         if event == sg.WIN_CLOSED or event == 'Отменить':
-#             break
-#     window.close()
-
-
-# if __name__ == '__main__':
-#     main()
-
+import PySimpleGUI as sg
 from os import walk, path
-from xml.template import template
-from xml.main import read
-from xml.parse import get_teacher_info, merge_teacher_info, get_year, sort_groups, prepare_groups
+from xmlmd.template import template
+from xmlmd.main import read
+from xmlmd.parse import get_teacher_info, merge_teacher_info, get_year, sort_groups, prepare_groups
 
 
 def get_all_files(dir):
@@ -73,3 +46,31 @@ def parse_all_files(files):
 all_files = get_all_files('input')
 print(all_files)
 parse_all_files(all_files)
+
+
+
+# sg.theme('System Default For Real')
+
+
+# def main():
+#     layout = [
+#         [sg.FilesBrowse('Выберите файлы...', key='-FILES-', file_types=(("Файлы Excel", "*.xls *xlsx"),))],
+#         [sg.B('Сформировать отчетность'), sg.B('Отменить')]
+#     ]
+#     window = sg.Window('337POk1', layout)
+
+#     while True:
+#         event, values = window.read(timeout = 20)
+#         print(values['-FILES-'])
+#         if values['-FILES-']:
+#             window['-FILES-'].update('Выбрано файлов: ' + str(len(values['-FILES-'].split(';'))))
+#         else:
+#             window['-FILES-'].update('Выберите файлы...')
+
+#         if event == sg.WIN_CLOSED or event == 'Отменить':
+#             break
+#     window.close()
+
+
+# if __name__ == '__main__':
+#     main()
