@@ -27,23 +27,25 @@
 #     main()
 
 from os import walk, path
+from xml.template import template
 from xml.main import read
-from xml.parse import get_teacher_info, merge_teacher_info, get_year, sort_groups
+from xml.parse import get_teacher_info, merge_teacher_info, get_year, sort_groups, prepare_groups
 
 
 def get_all_files(dir):
     f = []
     for (dirpath, dirnames, filenames) in walk(dir):
-        f.extend(filenames)
+        fn = []
+        for file in filenames:
+            fn.append(path.join(dir, file))
+        f.extend(fn)
         break
     return f
 
 
-def parse_all_files(dir):
-    files = get_all_files(dir)
+def parse_all_files(files):
     output = {}
-    for e in files:
-        file = path.join(dir, e)
+    for file in files:
         basename = path.basename(file)
         (base, _) = path.splitext(basename)
         [group, group_col] = base.split('_')
@@ -57,8 +59,17 @@ def parse_all_files(dir):
 
     print(output)
     for i in output:
-        print(sort_groups(output[i]))
+        sorted = sort_groups(output[i])
+        # print(sorted)
+        year = 2021
+        prepared = prepare_groups(sorted, year)
+        print(len(prepared) == 0)
+        if len(prepared) > 0:
+            file = template(i, prepared, year)
+            [familia, name, father] = i.split(' ')
+            file.save(path.join('o', '%s_%d.xls' % (familia, year)))
     # print(sort_groups(output))
 
-
-parse_all_files('input')
+all_files = get_all_files('input')
+print(all_files)
+parse_all_files(all_files)
