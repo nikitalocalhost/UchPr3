@@ -1,10 +1,12 @@
 import re
+from typing import Any
 from .main import read, find_data_in_col
 from xlrd.book import Book
 from xlrd.sheet import Sheet
 
 
 name_pattern = re.compile("[a-zA-Zа-яА-Я]+ [a-zA-Zа-яА-Я]+")
+
 
 def get_year(wb: Book):
     ws = wb.sheet_by_index(0)
@@ -20,7 +22,7 @@ def get_teacher_info(ws: Sheet, year: int, group: str, group_col: int):
         try:
             data = find_data_in_col(ws, 105 - ((8 - sems) * 10), name_pattern)
         except:
-            sems -=1
+            sems -= 1
 
     # try:
     #     data = find_data_in_col(ws, 105, name_pattern)
@@ -91,3 +93,41 @@ def merge_teacher_info(tl1: dict[str, list], tl2: dict[str, list]):
             else:
                 list[t] = l[t]
     return list
+
+
+# def _sort_groups(gr1: dict[str, Any], gr2: dict[str, Any]):
+#     semv1: dict[int, list[int]] = gr1['semesters']
+#     k1 = semv1.keys[0]
+#     v1 = gr1['year'] * 10 + k1 * 4.99
+
+#     semv2: dict[int, list[int]] = gr2['semesters']
+#     k2 = semv2.keys[0]
+#     v2 = gr2['year'] * 10 + k2 * 4.99
+
+#     if v1 > v2:
+#         return 1
+#     elif v2 > v1:
+#         return -1
+
+#     s1 = gr1['name']
+#     s2 = gr2['name']
+
+#     if not s1 > s2:
+#         return 1
+#     elif not s2 > s1:
+#         return -1
+#     else:
+#         return 0
+
+
+def _sort_groups(gr: dict[str, Any]):
+    semv1: dict[int, list[int]] = gr['semesters']
+    k1 = list(gr['semesters'])[0]
+    v1 = gr['year'] * 10 + k1 * 4.99
+    s1 = gr['name']
+    s2 = gr['group']
+
+    return (v1, s1, s2)
+
+def sort_groups(gr: list[dict[str, Any]]):
+    return gr.sort(key=_sort_groups)

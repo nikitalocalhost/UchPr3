@@ -28,7 +28,7 @@
 
 from os import walk, path
 from xml.main import read
-from xml.parse import get_teacher_info, merge_teacher_info, get_year
+from xml.parse import get_teacher_info, merge_teacher_info, get_year, sort_groups
 
 
 def get_all_files(dir):
@@ -56,6 +56,9 @@ def parse_all_files(dir):
             pass
 
     print(output)
+    for i in output:
+        print(sort_groups(output[i]))
+    # print(sort_groups(output))
 
 
 parse_all_files('input')
