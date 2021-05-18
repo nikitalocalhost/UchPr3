@@ -2,7 +2,7 @@ import re
 import datetime
 from typing import Any
 from .main import read, find_data_in_col
-from xlrd.book import Book
+from xlrd.book import Book, expand_cell_address
 from xlrd.sheet import Sheet
 
 now = datetime.datetime.now()
@@ -124,12 +124,16 @@ def merge_teacher_info(tl1: dict[str, list], tl2: dict[str, list]):
 
 def _sort_groups(gr: dict[str, Any]):
     semv1: dict[int, list[int]] = gr['semesters']
-    k1 = list(gr['semesters'])[0]
-    v1 = gr['year'] * 10 + k1 * 4.99
-    s1 = gr['name']
-    s2 = gr['group']
+    try:
+        k1 = list(gr['semesters'])[0]
+        v1 = gr['year'] * 10 + k1 * 4.99
+        s1 = gr['name']
+        s2 = gr['group']
 
-    return (v1, s1, s2)
+        return (v1, s1, s2)
+    except:
+        return (9999, gr['name'], gr['group'])
+
 
 def sort_groups(gr: list[dict[str, Any]]):
     gr.sort(key=_sort_groups)
