@@ -75,7 +75,7 @@ def template(fio: str, rows: list[dict[str, Any]], year: int = now.year):
 
     ws.write_merge(1, 1, 0, 17, 'ПЕДАГОГИЧЕСКАЯ НАГРУЗКА на  %d / %d учебный год' %
                    (year, year + 1), styles["header_wb"])
-    ws.write_merge(2, 2, 0, 17, 'Преподаватль %s' % (fio), styles["header_wb"])
+    ws.write_merge(2, 2, 0, 17, 'Преподаватель %s' % (fio), styles["header_wb"])
     ws.write_merge(3, 4, 0, 0, '№ п/п', styles["header"])
     ws.write_merge(3, 4, 1, 1, 'Предмет, дисциплина, МДК', styles["header"])
     ws.write_merge(3, 4, 2, 2, 'Группа', styles["header"])
@@ -107,7 +107,7 @@ def template(fio: str, rows: list[dict[str, Any]], year: int = now.year):
         insert_subject(ws, n, n - 5, row['name'],
                        row['group'], row['group_col'], row['sems'], row['dopr'], row['vkr'], row['gek'])
         n += 1
-    write(ws, n, 17, xlwt.Formula('SUM(R6:R%d)' % (n+1)), styles['text_cr'])
+    write(ws, n, 17, xlwt.Formula('SUM(R6:R%d)' % (n)), styles['text_cr'])
     n += 1
     write(ws, n, 1, "ИТОГО педагогическая нагрузка на год: ", styles['text_wb'])
     write(ws, n, 2, xlwt.Formula('R%d' % (n)), styles['text_wb_cr'])

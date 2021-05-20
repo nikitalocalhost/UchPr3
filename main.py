@@ -103,7 +103,7 @@ def main():
         # [sg.I(''), sg.FolderBrowse('Выберите папку...', key='-FOLDER-')],
         [sg.B('Отменить', key='-CLOSE-'), sg.B('Сформировать', key='-DO-')]
     ]
-    window = sg.Window('337POk1', layout)
+    window = sg.Window('Тарификация преподавателей', layout)
 
     while True:
         event, values = window.read(timeout=20)
