@@ -1,7 +1,7 @@
 import re
 import datetime
 from typing import Any
-from .main import read, find_data_in_col
+from .main import read_xls, find_data_in_col_xls
 from xlrd.book import Book, expand_cell_address
 from xlrd.sheet import Sheet
 
@@ -10,26 +10,26 @@ now = datetime.datetime.now()
 name_pattern = re.compile("[a-zA-Zа-яА-Я]+ [a-zA-Zа-яА-Я]+")
 
 
-def get_year(wb: Book):
+def get_year_xls(wb: Book):
     ws = wb.sheet_by_index(0)
     year = ws.cell_value(26, 44)
     return int(year)
 
 
-def get_teacher_info(ws: Sheet, year: int, group: str, group_col: int):
+def get_teacher_info_xls(ws: Sheet, year: int, group: str, group_col: int):
     teachers: dict[str, list] = {}
     sems = 8
     data = False
     while not data:
         try:
-            data = find_data_in_col(ws, 105 - ((8 - sems) * 10), name_pattern)
+            data = find_data_in_col_xls(ws, 105 - ((8 - sems) * 10), name_pattern)
         except:
             sems -= 1
 
     # try:
-    #     data = find_data_in_col(ws, 105, name_pattern)
+    #     data = find_data_in_col_xls(ws, 105, name_pattern)
     # except:
-    #     data = find_data_in_col(ws, 105 - 20, name_pattern)
+    #     data = find_data_in_col_xls(ws, 105 - 20, name_pattern)
     #     sems -= 2
     for i in data:
         name = data[i]

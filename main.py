@@ -1,8 +1,8 @@
 import PySimpleGUI as sg
 from os import walk, path
 from xmlmd.template import template
-from xmlmd.main import read
-from xmlmd.parse import get_teacher_info, merge_teacher_info, get_year, sort_groups, prepare_groups
+from xmlmd.main import read_xls
+from xmlmd.parse import get_teacher_info_xls, merge_teacher_info, get_year_xls, sort_groups, prepare_groups
 
 
 def get_all_files(dir):
@@ -23,9 +23,9 @@ def parse_all_files(files):
         (base, _) = path.splitext(basename)
         [group, group_col] = base.split('_')
         try:
-            wb = read(file)
+            wb = read_xls(file)
             ws = wb.sheet_by_index(2)
-            ti = get_teacher_info(ws, get_year(wb), group, group_col)
+            ti = get_teacher_info_xls(ws, get_year_xls(wb), group, group_col)
             output = merge_teacher_info(output, ti)
         except:
             pass
@@ -60,7 +60,7 @@ parse_all_files(all_files)
 #     window = sg.Window('337POk1', layout)
 
 #     while True:
-#         event, values = window.read(timeout = 20)
+#         event, values = window.read_xls(timeout = 20)
 #         print(values['-FILES-'])
 #         if values['-FILES-']:
 #             window['-FILES-'].update('Выбрано файлов: ' + str(len(values['-FILES-'].split(';'))))

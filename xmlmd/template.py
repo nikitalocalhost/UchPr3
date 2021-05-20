@@ -8,6 +8,8 @@ now = datetime.datetime.now()
 styles = {
     "text": easyxf('borders: top thin, bottom thin, left thin, right thin; font: name Times New Roman; align: wrap on'),
     "text_cr": easyxf('borders: top thin, bottom thin, left thin, right thin; font: name Times New Roman; align: wrap on, horiz center'),
+    "text_wb": easyxf('font: name Times New Roman; align: wrap on'),
+    "text_wb_cr": easyxf('font: name Times New Roman; align: wrap on, horiz center'),
     "header": easyxf('borders: top thin, bottom thin, left thin, right thin; font: name Times New Roman, bold on; align: wrap on, vert centre, horiz center'),
     "header_wb": easyxf('font: name Times New Roman, bold on; align: wrap on, vert centre, horiz center'),
     "header_vt": easyxf('borders: top thin, bottom thin, left thin, right thin; font: name Times New Roman, bold on; align: wrap on, vert centre, horiz center, rotation 90')
@@ -102,24 +104,23 @@ def template(fio: str, rows: list[dict[str, Any]], year: int = now.year):
     n = 5
 
     for row in rows:
-        insert_subject(ws, n, 6 - n, row['name'],
+        insert_subject(ws, n, n - 5, row['name'],
                        row['group'], row['group_col'], row['sems'], row['dopr'], row['vkr'], row['gek'])
         n += 1
-    n += 1
     write(ws, n, 17, xlwt.Formula('SUM(R6:R%d)' % (n+1)), styles['text_cr'])
     n += 1
-    write(ws, n, 1, "ИТОГО педагогическая нагрузка на год: ", styles['text'])
-    write(ws, n, 2, xlwt.Formula('R%d' % (n)), styles['text_cr'])
+    write(ws, n, 1, "ИТОГО педагогическая нагрузка на год: ", styles['text_wb'])
+    write(ws, n, 2, xlwt.Formula('R%d' % (n)), styles['text_wb_cr'])
     # write(ws, n, 2, "asd", styles['text_cr'])
     n += 1
-    write(ws, n, 1, "Заместитель директора", styles['text'])
+    write(ws, n, 1, "Заместитель директора", styles['text_wb'])
     n += 1
     write(ws, n, 1, "по УМР:                 _______________Н.Ю. Таратынова",
-          styles['text'])
+          styles['text_wb'])
     n += 1
     [familia, name, father] = fio.split(" ")
     write(ws, n, 1, "Преподаватель:     _______________%s.%s.%s" %
-          (name[0], father[0], familia), styles['text'])
+          (name[0], father[0], familia), styles['text_wb'])
 
     return wb
 
