@@ -207,6 +207,6 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/windows,linux,visualstudiocode,python
 
 input
-output
-o
-si
+output/*
+reference
+!output/.gitkeep

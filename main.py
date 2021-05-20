@@ -40,7 +40,7 @@ def parse_all_files(files):
         if len(prepared) > 0:
             file = template(i, prepared, year)
             [familia, name, father] = i.split(' ')
-            file.save(path.join('o', '%s_%d.xls' % (familia, year)))
+            file.save(path.join('output', '%s_%d.xls' % (familia, year)))
     # print(sort_groups(output))
 
 all_files = get_all_files('input')
