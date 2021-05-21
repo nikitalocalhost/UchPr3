@@ -10,15 +10,16 @@ from xmlmd.parse import get_teacher_info_xls, merge_teacher_info, get_year_xls, 
 
 now = datetime.now()
 
-# def get_all_files(dir):
-#     f = []
-#     for (dirpath, dirnames, filenames) in walk(dir):
-#         fn = []
-#         for file in filenames:
-#             fn.append(path.join(dir, file))
-#         f.extend(fn)
-#         break
-#     return f
+
+def get_all_files(dir):
+    f = []
+    for (dirpath, dirnames, filenames) in walk(dir):
+        fn = []
+        for file in filenames:
+            fn.append(path.join(dir, file))
+        f.extend(fn)
+        break
+    return f
 
 
 def parse_all_files(files, year, of):
@@ -50,6 +51,7 @@ def parse_all_files(files, year, of):
 # print(all_files)
 # parse_all_files(all_files)
 
+
 def get_int(s: str) -> int:
     def c(s: str) -> bool:
         return s.isnumeric()
@@ -65,11 +67,18 @@ def get_int(s: str) -> int:
         s = s[1:]
     return n
 
+
 def gen(sg, values):
+    files = []
     if not values['-FILES-'] or len(values['-FILES-'].split(';')) == 0:
-        sg.PopupError('Файлы не выбраны.', title='Ошибка')
-        return
-    files = values['-FILES-'].split(';')
+        if values['-FOLDER-']:
+            files = get_all_files(values['-FOLDER-'])
+        else:
+            sg.PopupError('Файлы не выбраны.', title='Ошибка')
+            return
+    else:
+        files = values['-FILES-'].split(';')
+
     if not values['-YEAR-']:
         sg.PopupError('Год не выбран.', title='Ошибка')
         return
@@ -97,7 +106,7 @@ sg.theme('System Default For Real')
 def main():
     layout = [
         [sg.FilesBrowse('Выберите файлы...', key='-FILES-',
-                        file_types=(("Файлы Excel", "*.xls *xlsx"),))],
+                        file_types=(("Файлы Excel", "*.xls"),)), sg.T('или'), sg.FolderBrowse('Выберите папку', key='-FOLDER-', target=(0, -1))],
         [sg.T('Год: '), sg.I('%d' % now.year, key='-YEAR-',
                              enable_events=True), sg.T(' / %d' % (now.year + 1), key='-YEAR-END-')],
         # [sg.I(''), sg.FolderBrowse('Выберите папку...', key='-FOLDER-')],
@@ -117,15 +126,13 @@ def main():
         else:
             window['-FILES-'].update('Выберите файлы...')
 
-        
         if event == '-YEAR-':
             if values['-YEAR-']:
                 year = get_int(values['-YEAR-'])
                 window['-YEAR-'].update(year)
-                window['-YEAR-END-'].update(year + 1)
+                window['-YEAR-END-'].update('/ %d' % (year + 1))
         if event == '-DO-':
             gen(sg, values)
-                
 
     window.close()
 
